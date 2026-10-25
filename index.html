@@ -15,7 +15,6 @@
 
   <style>
     :root {
-      /* โทนสีชาร์โคลมินิมอล + ชมพูบลัชไอซี่ + ครีมสว่าง */
       --color-charcoal: #545258;
       --color-charcoal-dark: #38363d;
       --color-grey-soft: #8e8b94;
@@ -49,7 +48,6 @@
       z-index: 2;
     }
 
-    /* Welcome Gate แตะเพื่อเริ่มเพลง */
     .enter-gate {
       position: fixed; inset: 0; background: rgba(244, 241, 242, 0.95); backdrop-filter: blur(14px);
       z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -68,7 +66,6 @@
       box-shadow: 0 6px 18px rgba(84, 82, 88, 0.25);
     }
 
-    /* เลเยอร์ภาพ PNG ลอย */
     .floating-layer { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
     .float-item {
       position: absolute; bottom: -80px; width: 44px; height: 44px; object-fit: contain;
@@ -84,15 +81,12 @@
 
     .wrapper { width: 100%; max-width: 440px; position: relative; z-index: 2; padding-bottom: 70px; }
 
-    /* แบนเนอร์ */
     .banner-box { width: 100%; height: 160px; background: var(--color-grey-light); overflow: hidden; position: relative; border-bottom: 1.5px solid var(--border-tone); }
     .banner-box img { width: 100%; height: 100%; object-fit: cover; }
     
-    /* ส่วนโปรไฟล์และกรอบตกแต่ง */
     .profile-section { padding: 0 18px; margin-top: -55px; position: relative; }
     .profile-row { display: flex; align-items: flex-end; justify-content: space-between; }
     
-    /* ปรับขนาดและตำแหน่งให้พอดีกับกรอบ 0exhgz.png เป๊ะ */
     .avatar-wrapper { 
       position: relative; 
       width: 105px; 
@@ -141,7 +135,6 @@
       box-shadow: 0 3px 10px rgba(0,0,0,0.04); font-weight: 600;
     }
 
-    /* ไฮไลท์สตอรี่ */
     .highlights-scroll {
       display: flex; gap: 14px; padding: 18px 18px 10px; overflow-x: auto;
       scrollbar-width: none; -ms-overflow-style: none;
@@ -161,7 +154,6 @@
     }
     .highlight-name { font-size: 11px; color: var(--text-dark); max-width: 68px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; font-weight: 600; }
 
-    /* 4 แท็บเมนู */
     .tabs-header {
       display: flex; border-top: 1.5px solid var(--border-tone); border-bottom: 1.5px solid var(--border-tone);
       margin-top: 10px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);
@@ -176,7 +168,7 @@
     .tab-content { display: none; padding: 16px; }
     .tab-content.active { display: block; }
 
-    /* แท็บ 1: Home Grid (6 Posts) */
+    /* แท็บ 1: Home Grid โพสต์ไม่จำกัด */
     .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
     .post-card { position: relative; aspect-ratio: 1/1; overflow: hidden; background: #fff; cursor: pointer; border-radius: 6px; border: 1px solid var(--border-tone); box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
     .post-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s; }
@@ -283,7 +275,6 @@
 </head>
 <body>
 
-  <!-- เข้าเว็บเพื่อเริ่มเล่นเพลง -->
   <div class="enter-gate" id="enterGate" onclick="unlockAudioAndEnter()">
     <div class="enter-card">
       <h2 style="font-size: 18px; color: var(--color-charcoal);" id="gateTitle">Nangmilo</h2>
@@ -294,16 +285,13 @@
 
   <audio id="bgMusic" loop preload="auto" src="https://file.garden/asG8Gt-rqWIpi3II/Ariana%20Grande%20-%20intro%20(end%20of%20the%20world)%20(extended)%20(lyric%20visualizer).mp3"></audio>
 
-  <!-- เลเยอร์ภาพลอย IMG_4400.png -->
   <div class="floating-layer" id="floatingLayer"></div>
 
   <div class="wrapper">
-    <!-- แบนเนอร์ -->
     <div class="banner-box">
       <img id="bannerImg" src="https://file.garden/asG8Gt-rqWIpi3II/line_oa_chat_261025_185339.jpeg" alt="Banner">
     </div>
 
-    <!-- ส่วนโปรไฟล์และกรอบดิสคอร์ด -->
     <div class="profile-section">
       <div class="profile-row">
         <div class="avatar-wrapper">
@@ -329,10 +317,8 @@
       </div>
     </div>
 
-    <!-- ไฮไลท์สตอรี่ -->
     <div class="highlights-scroll" id="highlightsBar"></div>
 
-    <!-- 4 แท็บเมนู -->
     <div class="tabs-header">
       <button class="tab-btn active" onclick="switchTab('home')">Home</button>
       <button class="tab-btn" onclick="switchTab('review')">Review</button>
@@ -340,7 +326,7 @@
       <button class="tab-btn" onclick="switchTab('contact')">Contact</button>
     </div>
 
-    <!-- แท็บ 1: Home (โพสต์ 6 ช่อง) -->
+    <!-- แท็บ 1: Home (โพสต์แบบไม่จำกัด) -->
     <div class="tab-content active" id="tab-home">
       <div class="posts-grid" id="postsGrid"></div>
     </div>
@@ -430,6 +416,7 @@
     const db = firebase.firestore();
 
     const DB_SITE = "nangmilo_review_site";
+    const DB_POSTS = "nangmilo_review_posts"; // แยกเก็บโพสต์เป็น Collection ไม่จำกัดจำนวน
     const DB_FEEDBACK = "nangmilo_review_feedback";
     const DB_HL_SLIDES = "nangmilo_review_hl_slides";
 
@@ -439,7 +426,6 @@
     const DEFAULT_FRAME_IMG = "https://files.catbox.moe/0exhgz.png";
 
     let currentHighlights = [];
-    let currentPosts = [];
     let activeHighlightIdx = 0;
     let activeStoryImgIdx = 0;
     let storyTimer = null;
@@ -476,11 +462,6 @@
           renderHighlights(currentHighlights);
         }
 
-        if (d.posts && Array.isArray(d.posts)) {
-          currentPosts = d.posts.filter(p => p.image);
-          renderPosts(currentPosts);
-        }
-
         document.getElementById("detailsText").textContent = d.details || "ยินดีต้อนรับสู่ร้าน Nangmilo ค่ะ สามารถสอบถามรายละเอียดและดูรีวิวได้เลยนะคะ ♡";
         
         renderContacts(d.contacts || [
@@ -492,6 +473,13 @@
           music.src = d.musicUrl;
         }
       }
+    });
+
+    // โหลดโพสต์แบบ Realtime แยก Collection ไม่จำกัดจำนวน
+    db.collection(DB_POSTS).orderBy("idx", "asc").onSnapshot(snap => {
+      const posts = [];
+      snap.forEach(doc => posts.push({ id: doc.id, ...doc.data() }));
+      renderPosts(posts);
     });
 
     const music = document.getElementById("bgMusic");
@@ -538,11 +526,12 @@
         document.getElementById("postCount").textContent = "0";
         return;
       }
-      posts.slice(0, 6).forEach((p) => {
+      posts.forEach((p) => {
+        if (!p.image) return;
         const card = document.createElement("div");
         card.className = "post-card";
         card.onclick = () => openPostModal(p);
-        card.innerHTML = `<img src="${p.image || ''}">`;
+        card.innerHTML = `<img src="${p.image}">`;
         grid.appendChild(card);
       });
       document.getElementById("postCount").textContent = posts.length;
@@ -714,7 +703,6 @@
       document.getElementById(`tab-${tabId}`).classList.add("active");
     }
 
-    // ภาพ PNG ลอย IMG_4400.png
     const floatingBox = document.getElementById("floatingLayer");
     setInterval(() => {
       const el = document.createElement("img");
